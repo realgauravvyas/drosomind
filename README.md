@@ -12,6 +12,28 @@
 
 ---
 
+## 📸 Interactive Dashboard Preview
+
+![DROSOMIND Dual Split View Dashboard](assets/screenshots/dashboard_split_view.png)
+
+<p align="center">
+  <i>Dual Split View: 3D Connectome (166k neurons, 125M synapses) paired with a physically articulated living Drosophila melanogaster model & real-time electrophysiology HUD.</i>
+</p>
+
+### 🔬 Feature Highlights Gallery
+
+| Guided Neural Tour | 3D Articulated Living Organism |
+| :---: | :---: |
+| ![Guided Tour](assets/screenshots/guided_tour.png) | ![Living Organism](assets/screenshots/living_organism_3d.png) |
+| *6-Stop Guided Tour with Camera Trajectories* | *Physically articulated joints, wings, and compound eyes* |
+
+| Google Research Sexual Dimorphism | Scientific Foundation & Citation |
+| :---: | :---: |
+| ![Sexual Dimorphism](assets/screenshots/sexual_dimorphism.png) | ![Science Modal](assets/screenshots/science_modal.png) |
+| *Bilateral P1 Courtship Bridge (Cell 2026)* | *Interactive Cell 2026 paper breakdown and details* |
+
+---
+
 ## 🌟 Overview: What Makes DROSOMIND Unique?
 
 While previous connectomics experiments have implemented simple games or static 3D mesh viewers, **DROSOMIND** is a **first-of-its-kind closed-loop cybernetic organism and bio-acoustic synesthesia engine**.
@@ -85,7 +107,7 @@ DROSOMIND is built with **zero build step and zero dependencies**. It runs 100% 
 ### Option 1: Run with any local server
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/drosomind.git
+git clone https://github.com/realgauravvyas/drosomind.git
 cd drosomind
 
 # Start any local HTTP server (e.g. Python)
@@ -108,18 +130,17 @@ To publish your live demo online for free on GitHub Pages:
 
 1. Push this repository to GitHub:
    ```bash
-   git init
    git add .
-   git commit -m "Initial release of DROSOMIND Connectome Organism"
+   git commit -m "Update DROSOMIND with dashboard screenshots"
    git branch -M main
-   git remote add origin https://github.com/your-username/drosomind.git
+   git remote add origin https://github.com/realgauravvyas/drosomind.git
    git push -u origin main
    ```
 2. In your GitHub repository:
    - Go to **Settings** &rarr; **Pages**.
-   - Under **Build and deployment** &rarr; **Source**, select **GitHub Actions** (or select **Deploy from a branch** &rarr; branch: `main` / root `/`).
+   - Under **Build and deployment** &rarr; **Source**, select **GitHub Actions**.
    - Your live site will be accessible at:  
-     `https://<your-username>.github.io/drosomind/`
+     `https://realgauravvyas.github.io/drosomind/`
 
 ---
 
