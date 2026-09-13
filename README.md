@@ -1,11 +1,24 @@
 # DROSOMIND 🪰⚡
 ### Live In-Silico Male Fruit Fly Connectome & Bio-Acoustic Organism Simulator
 
+<p align="center">
+  <a href="https://realgauravvyas.github.io/drosomind/">
+    <img src="https://img.shields.io/badge/🚀_LAUNCH_LIVE_SIMULATOR-realgauravvyas.github.io%2Fdrosomind-00e5ff?style=for-the-badge&logo=google-chrome&logoColor=black" alt="Live Demo" />
+  </a>
+  <a href="https://realgauravvyas.github.io/drosomind/">
+    <img src="https://img.shields.io/badge/GitHub_Pages-LIVE-00ff88?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Pages Status" />
+  </a>
+</p>
+
 [![Connectome Milestone](https://img.shields.io/badge/Connectome-Cell%202026-00e5ff.svg)](https://research.google/blog/a-connectomics-milestone-mapping-the-complete-male-fruit-fly-brain/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![WebGL](https://img.shields.io/badge/Three.js-r128-black.svg?logo=three.js)](https://threejs.org/)
 [![Web Audio API](https://img.shields.io/badge/Audio-Web%20Audio%20API-ff007f.svg)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
-[![GitHub Pages Ready](https://img.shields.io/badge/Deploy-GitHub%20Pages-00ff88.svg?logo=github)](https://pages.github.com/)
+[![Deploy Status](https://github.com/realgauravvyas/drosomind/actions/workflows/deploy.yml/badge.svg)](https://github.com/realgauravvyas/drosomind/actions/workflows/deploy.yml)
+
+> 🌐 **Experience the Live Simulation Online:**  
+> 👉 **[https://realgauravvyas.github.io/drosomind/](https://realgauravvyas.github.io/drosomind/)**  
+> *Zero installation required. Runs directly in any web browser with WebGL & Web Audio.*
 
 > Inspired by the landmark Google Research & HHMI Janelia publication:  
 > **"Sexual dimorphism in the complete connectome of the Drosophila male central nervous system"** (*Cell*, September 2026).
@@ -14,9 +27,14 @@
 
 ## 📸 Interactive Dashboard Preview
 
-![DROSOMIND Dual Split View Dashboard](assets/screenshots/dashboard_split_view.png)
+<p align="center">
+  <a href="https://realgauravvyas.github.io/drosomind/">
+    <img src="assets/screenshots/dashboard_split_view.png" alt="DROSOMIND Dual Split View Dashboard" width="100%" />
+  </a>
+</p>
 
 <p align="center">
+  <b>👆 <a href="https://realgauravvyas.github.io/drosomind/">Click here or on the image above to launch the live interactive simulation!</a></b><br>
   <i>Dual Split View: 3D Connectome (166k neurons, 125M synapses) paired with a physically articulated living Drosophila melanogaster model & real-time electrophysiology HUD.</i>
 </p>
 
