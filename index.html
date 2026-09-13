@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DROSOMIND — Live Male Fruit Fly Connectome & Bio-Organism Simulator</title>
+  <meta name="description" content="A groundbreaking in-silico 3D simulation of the complete male fruit fly brain and ventral nerve cord, based on Google Research's Cell 2026 connectomics milestone. Features biophysical neural dynamics, live courtship song synthesis, and closed-loop motor behavior.">
+  <meta name="keywords" content="Connectomics, Drosophila melanogaster, Fruit Fly Brain, Google Research, Janelia, Neuroscience, Spiking Neural Network, Bio-Acoustics, Courtship Song, Three.js, WebGL">
+  <meta name="author" content="Drosomind Team">
+
+  <!-- Open Graph / Social Sharing Metadata -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="DROSOMIND — Live Male Fruit Fly Connectome & Bio-Organism Simulator">
+  <meta property="og:description" content="Interactive 3D male fruit fly brain + VNC connectome driving a living virtual organism. Real-time biological courtship song synthesis, ring attractor compass navigation, and sexual dimorphism exploration.">
+  <meta property="og:image" content="https://storage.googleapis.com/gweb-research2023-media/images/HO_previewImage1.width-800.format-jpeg.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DROSOMIND — Male Fruit Fly Connectome In-Silico">
+  <meta name="twitter:description" content="Experience Google Research's male fruit fly connectome landmark live in 3D.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪰</text></svg>">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Three.js & OrbitControls via CDN (Zero build step, 100% GitHub Pages ready) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+  <!-- Fullscreen WebGL Canvas Container -->
+  <div id="webgl-container" aria-label="3D WebGL Visualization Canvas"></div>
+
+  <!-- Interactive HUD Application Overlay -->
+  <div class="app-overlay">
+    
+    <!-- Top Navigation Header -->
+    <header class="top-header glass-panel interactive">
+      <div class="brand-section">
+        <div class="logo-badge" aria-hidden="true">🪰</div>
+        <div>
+          <h1 class="brand-title">DROSOMIND</h1>
+          <div class="brand-subtitle">
+            <span class="live-indicator"></span>
+            <span>MALE CONNECTOME CNS (166k Neurons &bull; 125M Synapses &bull; <i>Cell</i> 2026)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- View Selector Tabs -->
+      <nav class="view-tabs" aria-label="Visualization Modes">
+        <button id="view-split" class="view-tab active" title="Dual-view: Connectome Brain and Living Organism">
+          <span>⚡</span> Split View
+        </button>
+        <button id="view-brain" class="view-tab" title="Full 3D Neural Connectome (Central Brain + VNC)">
+          <span>🧠</span> Connectome 3D
+        </button>
+        <button id="view-organism" class="view-tab" title="3D Articulated Living Organism Sandbox">
+          <span>🪰</span> Living Fly
+        </button>
+        <button id="view-dimorphism" class="view-tab" title="Google Research Sexual Dimorphism Comparative Inspection">
+          <span>🔬</span> Dimorphism (M/F)
+        </button>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="header-actions">
+        <button id="btn-guided-tour" class="btn-header tour-glow" title="Start an interactive guided journey through the fruit fly's 6 core neural systems">
+          <span class="icon">🚀</span> Guided Tour
+        </button>
+        <button id="btn-audio-toggle" class="btn-header" title="Toggle Bio-Acoustic Synthesizer (Courtship Song & Brainwave Sonification)">
+          <span class="icon">🔇</span> Bio-Acoustics: OFF
+        </button>
+        <div class="header-volume-group" title="Bio-Acoustic Master Volume">
+          <span class="vol-icon">🔉</span>
+          <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="1.0" class="volume-slider" aria-label="Audio Volume">
+        </div>
+        <button id="btn-info-modal" class="btn-header" title="Scientific background and Google Research paper details">
+          <span class="icon">ℹ️</span> Science
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace (Left Stimulus Toolbar + Right Telemetry HUD) -->
+    <main class="main-content-layout">
+      
+      <!-- Left Stimulus & Tool Dock -->
+      <aside class="stimulus-dock glass-panel interactive">
+        <div class="dock-title">
+          <span>⚡</span> Sensory Stimuli
+        </div>
+
+        <div class="stimulus-group">
+          <!-- Looming Predator Shadow -->
+          <button id="btn-stim-looming" class="stim-btn looming" title="Triggers Giant Fiber circuit -> Explosive escape jump & wing beat">
+            <span class="stim-icon">🦅</span>
+            <div class="stim-meta">
+              <span class="stim-name">Looming Predator</span>
+              <span class="stim-circuit">Lobula Plate &rarr; Giant Fiber &rarr; Takeoff</span>
+            </div>
+          </button>
+
+          <!-- Optomotor Left Rotation -->
+          <button id="btn-stim-opto-left" class="stim-btn" title="Simulates leftward visual flow grating -> Rotates compass attractor">
+            <span class="stim-icon">↺</span>
+            <div class="stim-meta">
+              <span class="stim-name">Optomotor Left</span>
+              <span class="stim-circuit">Optic Flow &rarr; Ring Attractor Steering</span>
+            </div>
+          </button>
+
+          <!-- Optomotor Right Rotation -->
+          <button id="btn-stim-opto-right" class="stim-btn" title="Simulates rightward visual flow grating -> Rotates compass attractor">
+            <span class="stim-icon">↻</span>
+            <div class="stim-meta">
+              <span class="stim-name">Optomotor Right</span>
+              <span class="stim-circuit">Optic Flow &rarr; Ring Attractor Steering</span>
+            </div>
+          </button>
+
+          <!-- Male Courtship Song Trigger -->
+          <button id="btn-stim-courtship" class="stim-btn courtship" title="Excites the male-specific P1 cluster -> Unilateral wing extension & acoustic courtship song">
+            <span class="stim-icon">🎵</span>
+            <div class="stim-meta">
+              <span class="stim-name">Courtship Song</span>
+              <span class="stim-circuit">P1 Hub &rarr; DNg02 &rarr; VNC T2 Wing Song</span>
+            </div>
+          </button>
+
+          <!-- Female cVA Pheromone Plume -->
+          <button id="btn-stim-pheromone" class="stim-btn" title="Female contact pheromone scent plume">
+            <span class="stim-icon">🌸</span>
+            <div class="stim-meta">
+              <span class="stim-name">cVA Pheromone</span>
+              <span class="stim-circuit">Antennal Lobe &rarr; P1 Courtship Cluster</span>
+            </div>
+          </button>
+
+          <!-- Sugar / Feeding Odor -->
+          <button id="btn-stim-sugar" class="stim-btn sugar" title="Sweet sugar taste -> Proboscis extension & grooming">
+            <span class="stim-icon">🍯</span>
+            <div class="stim-meta">
+              <span class="stim-name">Sugar Drop</span>
+              <span class="stim-circuit">Gr5a &rarr; Subesophageal Zone &rarr; Feeding</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Sexual Dimorphism Description (shown when in Dimorphism mode) -->
+        <div id="dimorphism-panel" class="dimorphism-panel">
+          <h4>Google Research Discovery: Sexual Dimorphism</h4>
+          <p>The landmark <i>Cell</i> 2026 paper mapped structural differences between male and female brains. Highlighted here is the <b>AOTU008 &rarr; P1 courtship pathway</b>:</p>
+          <div class="dimorphism-legend">
+            <div class="legend-item">
+              <span style="color:#00e5ff; font-weight:bold;">■</span> Male Branches (Bilateral P1 Bridge)
+            </div>
+            <div class="legend-item">
+              <span style="color:#ff007f; font-weight:bold;">■</span> Female (Streamlined/No Song)
+            </div>
+          </div>
+        </div>
+
+        <!-- Neuron Inspector Panel -->
+        <div class="neuron-inspector-card">
+          <div class="dock-title" style="margin-bottom: 8px;">
+            <span>🔬</span> Neuron Inspector
+          </div>
+          <div id="neuron-inspector">
+            <p style="color:var(--text-muted); font-size:11px;">Hover or click any soma node in the 3D connectome to inspect biological taxonomy, transmitter, and membrane potential.</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Telemetry HUD -->
+      <aside class="telemetry-dock glass-panel interactive">
+        <div class="dock-title">
+          <span>📊</span> Real-Time Electrophysiology
+        </div>
+
+        <!-- Badges Grid -->
+        <div class="telemetry-badges-row">
+          <div class="stat-box">
+            <div class="stat-label">Motor Behavior</div>
+            <div id="telemetry-behavior" class="stat-value hud-badge hud-badge-green">RESTING</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Spike Rate</div>
+            <div id="telemetry-spikerate" class="stat-value">0 Hz</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Mental Heading</div>
+            <div id="telemetry-heading" class="stat-value">0°</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Active Circuits</div>
+            <div id="telemetry-neurons" class="stat-value">--</div>
+          </div>
+        </div>
+
+        <!-- Multi-Channel Voltage Oscilloscope -->
+        <div class="monitor-card">
+          <div class="monitor-header">
+            <span>MEMBRANE POTENTIAL (Vm)</span>
+            <span style="font-size:10px; color:var(--accent-cyan);">&#9644; Optic &#9644; Compass &#9644; P1 &#9644; VNC</span>
+          </div>
+          <canvas id="oscillo-canvas" class="monitor-canvas" width="280" height="75"></canvas>
+        </div>
+
+        <!-- Neural Spike Raster Waterfall -->
+        <div class="monitor-card">
+          <div class="monitor-header">
+            <span>SPIKE RASTER PLOT (1.2s Window)</span>
+            <span style="font-size:10px; color:var(--accent-green);">Action Potentials</span>
+          </div>
+          <canvas id="raster-canvas" class="monitor-canvas" width="280" height="85"></canvas>
+        </div>
+
+        <!-- Central Complex Compass Ring Attractor Radar -->
+        <div class="monitor-card">
+          <div class="monitor-header">
+            <span>ELLIPSOID BODY RING ATTRACTOR</span>
+            <span style="font-size:10px; color:var(--accent-green);">16 Wedges (E-PG)</span>
+          </div>
+          <div class="compass-container">
+            <canvas id="compass-canvas" width="120" height="120"></canvas>
+          </div>
+        </div>
+
+        <!-- Audio Spectrogram (Courtship Song Acoustics) -->
+        <div class="monitor-card">
+          <div class="monitor-header">
+            <span>BIO-ACOUSTIC SPECTROGRAM</span>
+            <span style="font-size:10px; color:var(--accent-pink);">160-180 Hz Wing Song</span>
+          </div>
+          <canvas id="spectro-canvas" class="monitor-canvas" width="280" height="40"></canvas>
+        </div>
+      </aside>
+
+    </main>
+
+    <!-- Guided Tour Interactive Floating HUD Overlay -->
+    <div id="guided-tour-overlay" class="guided-tour-card glass-panel interactive" aria-live="polite">
+      <div class="tour-header">
+        <div class="tour-badge-group">
+          <span class="tour-tag">CONNECTOME EXPEDITION</span>
+          <span id="tour-step-badge" class="tour-step-pill">Stop 1 of 6</span>
+        </div>
+        <button id="btn-tour-close" class="tour-close-btn" title="Exit Guided Tour" aria-label="Exit Guided Tour">&times;</button>
+      </div>
+      <div class="tour-content">
+        <h3 id="tour-title" class="tour-title">1. Optic Lobes (Medulla, Lobula, LPTCs)</h3>
+        <p id="tour-desc" class="tour-desc">Processing omnidirectional optical flow and visual motion detection from over 700 ommatidia per compound eye.</p>
+        <div id="tour-circuit-tag" class="tour-circuit-tag">Circuit: Visual Flow &rarr; Tangential Cells</div>
+      </div>
+      <div class="tour-actions">
+        <button id="btn-tour-action" class="tour-action-btn" title="Trigger circuit behavior">
+          <span>⚡</span> <span id="tour-action-label">Simulate Optomotor</span>
+        </button>
+        <div class="tour-nav-btns">
+          <button id="btn-tour-prev" class="tour-nav-btn" title="Previous Circuit">&larr; Prev</button>
+          <button id="btn-tour-next" class="tour-nav-btn primary" title="Next Circuit">Next &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Interactive Control Dock -->
+    <footer class="bottom-dock glass-panel interactive">
+      <div class="bottom-left-tools">
+        <!-- Laser Micro-Ablation Tool -->
+        <button id="btn-tool-ablation" class="tool-btn" title="Toggle Laser Micro-Ablation: click any neuron in 3D to silence it and observe behavioral changes!">
+          <span>🔴</span> Laser Ablation Tool
+        </button>
+        <button id="btn-clear-ablation" class="tool-btn" title="Restore all ablated/silenced neural pathways">
+          <span>🔄</span> Restore Circuits
+        </button>
+
+        <!-- Sex Dimorphism Toggle -->
+        <div style="display:flex; gap:4px; margin-left:10px;">
+          <button id="btn-sex-male" class="tool-btn active" title="Active Male Connectome with P1 courtship circuits">
+            <span>♂</span> Male Fly
+          </button>
+          <button id="btn-sex-female" class="tool-btn" title="Female Connectome without male courtship song circuits">
+            <span>♀</span> Female Fly
+          </button>
+        </div>
+
+        <!-- Simulation Timescale Controls -->
+        <div class="timescale-group" title="Neural Simulation Timescale">
+          <span class="timescale-label">SPEED:</span>
+          <button id="btn-speed-quarter" class="speed-btn" data-speed="0.25" title="0.25x Slow Motion (study action potential propagation)">0.25&times;</button>
+          <button id="btn-speed-normal" class="speed-btn active" data-speed="1.0" title="1.0x Real-Time Biological Speed">1.0&times;</button>
+          <button id="btn-speed-double" class="speed-btn" data-speed="2.0" title="2.0x Hyper-Speed Acceleration">2.0&times;</button>
+        </div>
+      </div>
+
+      <!-- 1-Click Social Reel / Video Export -->
+      <div>
+        <button id="btn-record-reel" class="btn-reel-record" title="1-Click Record: Capture a high-res video reel directly from WebGL canvas to share on Instagram Reels, YouTube Shorts, or TikTok!">
+          <span class="icon">📹</span> RECORD REEL
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Scientific Background Modal Dialog -->
+  <div id="info-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-heading" class="modal-title">About DROSOMIND & Google Research Connectomics</h2>
+        <button id="btn-close-modal" class="btn-close-modal" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="citation-box">
+          <strong>Key Citation:</strong><br>
+          "Sexual dimorphism in the complete connectome of the Drosophila male central nervous system"<br>
+          <i>Cell</i>, September 2026. Google Research, HHMI Janelia, & Collaborators.
+        </div>
+
+        <h3>The Connectomics Milestone</h3>
+        <p>In September 2026, Google Research and the Howard Hughes Medical Institute (HHMI) Janelia Research Campus released the complete synaptic wiring diagram of the male fruit fly’s central nervous system (CNS), creating the largest high-resolution brain map in history.</p>
+
+        <h3>Breakthrough Scale</h3>
+        <ul>
+          <li><strong>166,000+ Reconstructed Neurons:</strong> Automated 3D segmentation via Flood-Filling Networks (FFNs) and the PATHFINDER AI system.</li>
+          <li><strong>125+ Million Synaptic Connections:</strong> Synapses annotated and human-verified across the Central Brain, Optic Lobes, and Ventral Nerve Cord.</li>
+          <li><strong>First Full Brain-to-Body Spinal Link:</strong> Maps descending commands from the brain through the Ventral Nerve Cord (VNC) directly into flight motor pools, legs, and courtship singing muscles.</li>
+        </ul>
+
+        <h3>What DROSOMIND Achieves</h3>
+        <p>Rather than simply visualizing a static 3D point cloud or building another detached puzzle game, DROSOMIND creates a <strong>closed-loop in-silico cybernetic life simulator</strong>:</p>
+        <ul>
+          <li><strong>Biophysical Spiking SNN:</strong> Leaky integrate-and-fire membrane dynamics with authentic neurotransmitters (ACh, GABA, Glutamate, Dopamine).</li>
+          <li><strong>Bio-Acoustic Courtship Synthesizer:</strong> Translates motor neuron spikes into the male fly's authentic 34Hz pulse repetition song and 160Hz sinusoidal flight hum.</li>
+          <li><strong>Ring Attractor Mental Compass:</strong> Simulates the 16 wedges of the Ellipsoid Body (E-PG neurons) that maintain spatial heading.</li>
+          <li><strong>Sexual Dimorphism Explorer:</strong> Dissects the male-specific P1 courtship hub and AOTU008 axonal arborizations.</li>
+          <li><strong>Interactive Ablation Sandbox:</strong> Silence individual neurons with a virtual laser micro-beam to observe behavioral circuit breakdown in real-time.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="js/connectome-data.js"></script>
+  <script src="js/neural-engine.js"></script>
+  <script src="js/fly-renderer-3d.js"></script>
+  <script src="js/bio-acoustics.js"></script>
+  <script src="js/telemetry-hud.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
