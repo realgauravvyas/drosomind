@@ -171,7 +171,16 @@ To publish your live demo online for free on GitHub Pages:
 
 ---
 
+## 👤 Author & Research
+
+**Gaurav Vyas**  
+- 🌐 **Personal Website & Academic Profile:** [socialpsychology.org/member/gaurav-vyas](https://www.socialpsychology.org/member/gaurav-vyas)  
+- 🔶 **Interactive Portfolio:** [realgauravvyas.github.io](https://realgauravvyas.github.io/)  
+- 🐙 **GitHub:** [@realgauravvyas](https://github.com/realgauravvyas)  
+
+---
+
 ## 📄 License
 
-MIT License &copy; 2026 DROSOMIND Contributors.
+MIT License &copy; 2026 DROSOMIND Contributors.  
 Open-source science for everyone.
